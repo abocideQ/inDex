@@ -37,4 +37,5 @@ BaseDexClassLoader 的运行方式: 传入 dex 文件->优化->保存优化后�
 DexClassLoader ->DexPathlist->dexElements[]
 将新的dex包与dexElement[] 合并放在数组最前面成一个新的dex,旧的dex就不会生效
 通过反射将 原来的dexElements[] 替换掉，这样就可不会加载旧的带有bug的class文件。
+Dex仅在 对象被调用前 写入PathList生效
 ```
