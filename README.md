@@ -32,7 +32,7 @@ libraryPath: 存放需要加载的 native 库的目录
 parent: 父ClassLoader
 BaseDexClassLoader 的运行方式: 传入 dex 文件->优化->保存优化后的 dex 文件到 optimizedDirectory 目录。
 
-1.热修复
+1.热修复 (class 会有缓存问题？)
 使用DexClassLoader：能够加载未安装的jar/apk/dex
 DexClassLoader ->DexPathlist->dexElements[]
 将新的dex包与dexElement[] 合并放在数组最前面成一个新的dex,旧的dex就不会生效
