@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingEnd="20dp"
+    android:paddingBottom="20dp"
     tools:context=".MainActivity">
 
     <Button
@@ -12,7 +14,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="Dex"
+        android:text="Click DexElement"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:text="Click Reflect"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -21,15 +33,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:text="测试"
+        android:layout_marginBottom="100dp"
+        android:text="Click"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="16sp"
-        android:text="Dex仅在 对象被调用前 写入PathList生效" />
+        android:text="类对象生成前 Dex写入DexElement才能生效"
+        android:textSize="16sp" />
 
 </RelativeLayout>
