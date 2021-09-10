@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="20dp"
-    android:paddingBottom="20dp"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
     <Button
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="Click DexElement"
+        android:text="DexElement"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -24,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
-        android:text="Click Reflect"
+        android:text="Reflect"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -35,6 +34,30 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:text="Click"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_hook_start_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hook Act"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_hook_start_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Hook Context"
+        tools:ignore="MissingConstraints" />
+
+
+    <Button
+        android:id="@+id/bt_tart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Start"
         tools:ignore="MissingConstraints" />
 
     <TextView

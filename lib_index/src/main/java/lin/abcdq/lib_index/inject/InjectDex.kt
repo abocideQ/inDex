@@ -5,6 +5,9 @@ import dalvik.system.BaseDexClassLoader
 import dalvik.system.DexClassLoader
 import java.io.File
 
+/**
+ * dexElement 倒桩插入Dex
+ */
 object InjectDex {
 
     private const val DEX_SUFFIX = ".dex"
