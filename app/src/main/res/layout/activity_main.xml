@@ -8,12 +8,42 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/bt_hook_start_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Hook Activity.ActivityStart"
+        android:textAllCaps="false"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_hook_start_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:text="Hook ContextImpl.StartActivity"
+        android:textAllCaps="false"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_tart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="100dp"
+        android:text="Activity.StartActivity"
+        android:textAllCaps="false"
+        tools:ignore="MissingConstraints" />
+
+    <Button
         android:id="@+id/bt_inject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="DexElement"
+        android:text="inject DexElement"
+        android:textAllCaps="false"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -23,7 +53,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
-        android:text="Reflect"
+        android:text="Reflect setOnclick"
+        android:textAllCaps="false"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -33,38 +64,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
-        android:text="Click"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/bt_hook_start_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hook Act"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/bt_hook_start_context"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Hook Context"
-        tools:ignore="MissingConstraints" />
-
-
-    <Button
-        android:id="@+id/bt_tart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Start"
+        android:text="View.onClick"
+        android:textAllCaps="false"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="类对象生成前 Dex写入DexElement才能生效"
+        android:text=" DexElement 倒插装 \n 仅 \n 对象类第一次加载前生效"
         android:textSize="16sp" />
 
 </RelativeLayout>

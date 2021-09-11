@@ -1,8 +1,5 @@
 package lin.abcdq.index
 
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +9,7 @@ import android.widget.Toast
 import lin.abcdq.index.utils.CAO
 import lin.abcdq.index.utils.Permission
 import lin.abcdq.index.utils.PermissionHandler
-import lin.abcdq.lib_index.hook.ActivityStartHook
+import lin.abcdq.lib_index.hook.StartActivityHook
 import lin.abcdq.lib_index.hook.JReflection
 import lin.abcdq.lib_index.inject.InjectDex
 import java.io.File
@@ -56,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
         mButtonHookStartActivity.setOnClickListener {
-            ActivityStartHook().hookActivityStart(
+            StartActivityHook().hookActivityStartContextImpl1(
                 this,
                 EmptyActivity::class.java.name,
                 ProxyActivity::class.java.name
@@ -65,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         mButtonHookStartContext.setOnClickListener {
-            ActivityStartHook().hookActivityStartContext(
+            StartActivityHook().hookActivityStartContextImpl2(
                 applicationContext,
                 EmptyActivity::class.java.name,
                 ProxyActivity::class.java.name

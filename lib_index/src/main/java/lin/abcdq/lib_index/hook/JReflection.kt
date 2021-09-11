@@ -12,7 +12,7 @@ object JReflection {
         return Class.forName(packName)
     }
 
-    fun <T> field(obj: Any, clazz: Class<T>, name: String): Any? {
+    fun <T> field(obj: Any?, clazz: Class<T>, name: String): Any? {
         try {
             val field = clazz.getDeclaredField(name)
             field.isAccessible = true
@@ -23,7 +23,7 @@ object JReflection {
         return null
     }
 
-    fun <T> field(obj: Any, clazz: Class<T>, name: String, value: Any) {
+    fun <T> field(obj: Any?, clazz: Class<T>, name: String, value: Any?) {
         try {
             val field = clazz.getDeclaredField(name)
             field.isAccessible = true
@@ -43,109 +43,34 @@ object JReflection {
         }
     }
 
-    fun <T> method(obj: Any?, clazz: Class<T>, name: String, vararg value: Any): Any? {
+    fun <T> method(
+        obj: Any?,
+        clazz: Class<T>,
+        name: String,
+        valueClazz: Array<Class<*>?>,
+        values: Array<Any?>
+    ): Any? {
         try {
             when {
-                obj == null -> {
+                obj == null -> {//@JavaStatic Method
                     val method = clazz.getDeclaredMethod(name)
                     method.isAccessible = true
                     return method.invoke(null)
                 }
-                value.isEmpty() -> {
+                valueClazz.isEmpty() -> {
                     val method = clazz.getDeclaredMethod(name)
                     method.isAccessible = true
                     return method.invoke(obj)
                 }
-                value.size == 1 -> {
-                    val method = clazz.getDeclaredMethod(name, value[0]::class.java)
+                values.isEmpty() -> {
+                    val method = clazz.getDeclaredMethod(name)
                     method.isAccessible = true
-                    return method.invoke(obj, value[0])
+                    return method.invoke(obj)
                 }
-                value.size == 2 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java
-                    )
+                else -> {
+                    val method = clazz.getDeclaredMethod(name, *valueClazz)
                     method.isAccessible = true
-                    return method.invoke(obj, value[0], value[1])
-                }
-                value.size == 3 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java
-                    )
-                    method.isAccessible = true
-                    return method.invoke(obj, value[0], value[1], value[2])
-                }
-                value.size == 4 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java
-                    )
-                    method.isAccessible = true
-                    return method.invoke(obj, value[0], value[1], value[2], value[3])
-                }
-                value.size == 5 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java,
-                        value[4]::class.java
-                    )
-                    method.isAccessible = true
-                    return method.invoke(obj, value[0], value[1], value[2], value[3], value[4])
-                }
-                value.size == 6 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java,
-                        value[4]::class.java,
-                        value[5]::class.java
-                    )
-                    method.isAccessible = true
-                    return method.invoke(
-                        obj,
-                        value[0],
-                        value[1],
-                        value[2],
-                        value[3],
-                        value[4],
-                        value[5]
-                    )
-                }
-                value.size == 7 -> {
-                    val method = clazz.getDeclaredMethod(
-                        name,
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java,
-                        value[4]::class.java,
-                        value[5]::class.java,
-                        value[6]::class.java
-                    )
-                    method.isAccessible = true
-                    return method.invoke(
-                        obj,
-                        value[0],
-                        value[1],
-                        value[2],
-                        value[3],
-                        value[4],
-                        value[5],
-                        value[6]
-                    )
+                    return method.invoke(obj, *values)
                 }
             }
         } catch (e: Exception) {
@@ -154,87 +79,25 @@ object JReflection {
         return null
     }
 
-    fun <T> construct(clazz: Class<T>, vararg value: Any): Any? {
+    fun <T> construct(
+        clazz: Class<T>,
+        valueClazz: Array<Class<*>?>,
+        values: Array<Any?>
+    ): Any? {
         try {
-            var constructor: Constructor<T>? = null
+            val constructor: Constructor<T>?
             when {
-                value.isEmpty() -> {
+                valueClazz.isEmpty() -> {
                     constructor = clazz.getDeclaredConstructor()
                     constructor.newInstance()
                 }
-                value.size == 1 -> {
-                    constructor = clazz.getDeclaredConstructor(value[0]::class.java)
-                    constructor?.newInstance(value[0])
+                values.isEmpty() -> {
+                    constructor = clazz.getDeclaredConstructor()
+                    constructor.newInstance()
                 }
-                value.size == 2 -> {
-                    constructor = clazz.getDeclaredConstructor(
-                        value[0]::class.java,
-                        value[1]::class.java
-                    )
-                    constructor?.newInstance(
-                        value[0],
-                        value[1]
-                    )
-                }
-                value.size == 3 -> {
-                    constructor = clazz.getDeclaredConstructor(
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java
-                    )
-                    constructor?.newInstance(
-                        value[0],
-                        value[1],
-                        value[2]
-                    )
-                }
-                value.size == 4 -> {
-                    constructor = clazz.getDeclaredConstructor(
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java
-                    )
-                    constructor?.newInstance(
-                        value[0],
-                        value[1],
-                        value[2],
-                        value[3]
-                    )
-                }
-                value.size == 5 -> {
-                    constructor = clazz.getDeclaredConstructor(
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java,
-                        value[4]::class.java
-                    )
-                    constructor?.newInstance(
-                        value[0],
-                        value[1],
-                        value[2],
-                        value[3],
-                        value[4]
-                    )
-                }
-                value.size == 6 -> {
-                    constructor = clazz.getDeclaredConstructor(
-                        value[0]::class.java,
-                        value[1]::class.java,
-                        value[2]::class.java,
-                        value[3]::class.java,
-                        value[4]::class.java,
-                        value[5]::class.java
-                    )
-                    constructor?.newInstance(
-                        value[0],
-                        value[1],
-                        value[2],
-                        value[3],
-                        value[4],
-                        value[5]
-                    )
+                else -> {
+                    constructor = clazz.getDeclaredConstructor(*valueClazz)
+                    constructor?.newInstance(*values)
                 }
             }
             return constructor
