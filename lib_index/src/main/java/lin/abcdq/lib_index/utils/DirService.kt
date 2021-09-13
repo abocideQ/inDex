@@ -37,38 +37,34 @@ object DirService {
     }
 
     /**
-     * MediaStore for public folder image/audio/video/download
+     * MediaStore for public folder Picture/Movie/Music/Download
      * api > 29
      */
 
-    @RequiresApi(VERSION_CODES.Q)
-    fun mediaStoreQuery(context: Context, name_or_Path: String): ArrayList<File> {
+    fun mediaStoreQuery(context: Context, mediaUri: Uri, tag: String): ArrayList<File> {
         val list = ArrayList<File>()
         try {
-            val selection = ("(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+            val selection = (""
+                    + "   (" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+                    + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0")
             val args = arrayOf(
                 MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
                 MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(),
+                MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString(),
                 MediaStore.Files.FileColumns.MEDIA_TYPE_NONE.toString()
             )
             val order = "datetaken DESC"
-            context.contentResolver.query(
-                mediaStoreDownload(),
-                null,
-                selection,
-                args,
-                order
-            )?.use { cursor ->
+            context.contentResolver.query(mediaUri, null, selection, args, order)?.use { cursor ->
                 while (cursor.moveToNext()) {
                     try {
                         val path: String = cursor.getString(cursor.getColumnIndexOrThrow("_data"))
                         val name: String =
                             cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
                                 ?: ""
-                        if (name.contains("" + name_or_Path) || path.contains("" + name_or_Path)) {
+                        if (name.contains("" + tag) || path.contains("" + tag)) {
                             list.add(File(path))
                         }
                     } catch (e: Exception) {
@@ -83,20 +79,13 @@ object DirService {
         return list
     }
 
-    @RequiresApi(VERSION_CODES.Q)
-    fun mediaStore2Download(
+    fun mediaStoreCreate(
         context: Context,
-        name_file: String,
-        name_folder: String
+        mediaUri: Uri,
+        mediaValue: ContentValues
     ): OutputStream? {
         try {
-            val values = ContentValues()
-            values.put(MediaStore.Files.FileColumns.DISPLAY_NAME, name_file)
-            values.put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_DOWNLOADS + "/$name_folder"
-            )
-            val uri = context.contentResolver.insert(mediaStoreDownload(), values)
+            val uri = context.contentResolver.insert(mediaUri, mediaValue)
             return context.contentResolver.openOutputStream(uri ?: return null)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -104,31 +93,77 @@ object DirService {
         return null
     }
 
-    @RequiresApi(VERSION_CODES.Q)
-    fun mediaStoreDelete(context: Context, name_or_path: String) {
+    fun mediaStoreDelete(context: Context, mediaUri: Uri, file: String) {
         try {
             val selection = "_display_name=? OR _data=?"
-            val args = arrayOf(name_or_path, name_or_path)
-            context.contentResolver.delete(mediaStoreDownload(), selection, args)
+            val args = arrayOf(file, file)
+            context.contentResolver.delete(mediaUri, selection, args)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     @RequiresApi(VERSION_CODES.Q)
-    private fun mediaStoreDownload(): Uri {
+    fun mediaUriDownload(): Uri {
         return MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
     }
 
-    private fun mediaStoreImage(): Uri {
+    fun mediaUriImage(): Uri {
         return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
     }
 
-    private fun mediaStoreVideo(): Uri {
+    fun mediaUriMovie(): Uri {
         return MediaStore.Video.Media.EXTERNAL_CONTENT_URI
     }
 
-    private fun mediaStoreAudio(): Uri {
+    fun mediaUriMusic(): Uri {
         return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    }
+
+    @RequiresApi(VERSION_CODES.Q)
+    fun mediaValueDownload(folder: String, name: String): ContentValues {
+        return ContentValues().apply {
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_DOWNLOADS + "/$folder"
+            )
+            put(MediaStore.Files.FileColumns.DISPLAY_NAME, name)
+        }
+    }
+
+    @RequiresApi(VERSION_CODES.Q)
+    fun mediaValueImage(folder: String, name: String, mime: String): ContentValues {
+        return ContentValues().apply {
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_PICTURES + "/$folder"
+            )
+            put(MediaStore.Images.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.MIME_TYPE, mime)
+        }
+    }
+
+    @RequiresApi(VERSION_CODES.Q)
+    fun mediaValueVideo(folder: String, name: String, mime: String): ContentValues {
+        return ContentValues().apply {
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_MOVIES + "/$folder"
+            )
+            put(MediaStore.Video.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.MIME_TYPE, mime)
+        }
+    }
+
+    @RequiresApi(VERSION_CODES.Q)
+    fun mediaValueMusic(folder: String, name: String, mime: String): ContentValues {
+        return ContentValues().apply {
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_MUSIC + "/$folder"
+            )
+            put(MediaStore.Audio.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.MIME_TYPE, mime)
+        }
     }
 }
