@@ -9,15 +9,27 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 
-class StartActivityHook {
+/**
+ * hook startActivity
+ */
+class IStartActivity {
 
     /**
      * 流程
+     *
      * Instrumentation() ->
-     * 1. execStartActivity()(用占用的空Activity验证) -> EmptyActivity (Registered in AndroidManifest.xml) ->
-     * 2 .newActivity()(通过验证后替换Activity) -> ProxyActivity (Not Registered in AndroidManifest.xml)
+     *
+     * 1. execStartActivity()(用空Activity验证) -> EmptyActivity (Registered in AndroidManifest.xml) ->
+     *
+     * 2. newActivity()(通过验证后替换Activity) -> ProxyActivity (Not Registered in AndroidManifest.xml)
      */
-    fun hookActivityStartContextImpl1(
+
+    /**
+     * example
+     *
+     * shellClass: ShellActivity::class.java ,  _pack: TargetActivity::class.java
+     */
+    fun hookInstrumentation1(
         activity: Activity,
         shellClass: String,
         targetClass: String
@@ -27,7 +39,7 @@ class StartActivityHook {
         val activityThreadClazz = JReflection.clazz("android.app.ActivityThread")
         //instrument
         val base = JReflection.field(mainThread!!, activityThreadClazz, "mInstrumentation")
-        val instrumentation = ActivityStartInstrumentation(
+        val instrumentation = IInstrumentation(
             base as Instrumentation,
             activity,
             shellClass,
@@ -36,7 +48,7 @@ class StartActivityHook {
         JReflection.field(mainThread, activityThreadClazz, "mInstrumentation", instrumentation)
     }
 
-    fun hookActivityStartContextImpl2(
+    fun hookInstrumentation2(
         context: Context,
         shellClass: String,
         targetClass: String
@@ -53,7 +65,7 @@ class StartActivityHook {
             )
         //instrument
         val base = JReflection.field(mainThread!!, activityThreadClazz, "mInstrumentation")
-        val instrumentation = ActivityStartInstrumentation(
+        val instrumentation = IInstrumentation(
             base as Instrumentation,
             context,
             shellClass,
@@ -62,7 +74,7 @@ class StartActivityHook {
         JReflection.field(mainThread, activityThreadClazz, "mInstrumentation", instrumentation)
     }
 
-    class ActivityStartInstrumentation(
+    class IInstrumentation(
         instrumentation: Instrumentation,
         context: Context,
         shellClass: String,

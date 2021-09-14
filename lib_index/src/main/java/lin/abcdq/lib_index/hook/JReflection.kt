@@ -53,9 +53,15 @@ object JReflection {
         try {
             when {
                 obj == null -> {//@JavaStatic Method
-                    val method = clazz.getDeclaredMethod(name)
-                    method.isAccessible = true
-                    return method.invoke(null)
+                    return if (values.isEmpty()) {
+                        val method = clazz.getDeclaredMethod(name)
+                        method.isAccessible = true
+                        method.invoke(null)
+                    } else {
+                        val method = clazz.getDeclaredMethod(name, *valueClazz)
+                        method.isAccessible = true
+                        method.invoke(null, *values)
+                    }
                 }
                 valueClazz.isEmpty() -> {
                     val method = clazz.getDeclaredMethod(name)

@@ -1,16 +1,19 @@
 package lin.abcdq.index
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import lin.abcdq.index.utils.CAO
 import lin.abcdq.index.utils.Permission
 import lin.abcdq.index.utils.PermissionHandler
-import lin.abcdq.lib_index.hook.StartActivityHook
+import lin.abcdq.lib_index.hook.IBinderInvoke
+import lin.abcdq.lib_index.hook.IStartActivity
 import lin.abcdq.lib_index.hook.JReflection
 import lin.abcdq.lib_index.inject.InjectDex
 import java.io.File
@@ -18,16 +21,21 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
+    //inject dexElement
     private val mButtonInject: Button by lazy { findViewById(R.id.bt_inject) }
     private val mButtonTest: Button by lazy { findViewById(R.id.bt_test) }
     private val mButtonMethod: Button by lazy { findViewById(R.id.bt_method) }
 
-    private val mButtonHookStartActivity: Button by lazy { findViewById(R.id.bt_hook_start_activity) }
-    private val mButtonHookStartContext: Button by lazy { findViewById(R.id.bt_hook_start_context) }
-    private val mButtonStartActivity: Button by lazy { findViewById(R.id.bt_tart) }
-
     private val dexPath by lazy { "${obbDir.absolutePath}/dex" }
     private val dexOutPath by lazy { "${obbDir.absolutePath}/dexOut" }
+
+    //hook startActivity
+    private val mButtonHookStartActivity: Button by lazy { findViewById(R.id.bt_hook_start_activity) }
+    private val mButtonHookStartContext: Button by lazy { findViewById(R.id.bt_hook_start_context) }
+    private val mButtonStartActivity: Button by lazy { findViewById(R.id.bt_start) }
+
+    //hook binder
+    private val mButtonHookBinder: Button by lazy { findViewById(R.id.bt_binder) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,24 +45,26 @@ class MainActivity : AppCompatActivity() {
                 val folder = File(dexPath)
                 if (!folder.exists()) folder.mkdirs()
                 CAO.copyAssetsDirToSDCard(this@MainActivity, "dex", obbDir.absolutePath)
-                mButtonInject.setOnClickListener { InjectDex.injectDex(dexPath, dexOutPath) }
-                mButtonTest.setOnClickListener { DOOO().tttt(this@MainActivity) }
-                mButtonMethod.setOnClickListener {
-                    val listener = View.OnClickListener {
-                        Toast.makeText(this@MainActivity, "???????????", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    JReflection.methodViewClick(
-                        mButtonTest,
-                        View::class.java,
-                        "setOnClickListener",
-                        listener
-                    )
-                }
             }
         })
+        //inject dexElement
+        mButtonInject.setOnClickListener { InjectDex.injectDex(dexPath, dexOutPath) }
+        mButtonTest.setOnClickListener { DOOO().tttt(this@MainActivity) }
+        mButtonMethod.setOnClickListener {
+            val listener = View.OnClickListener {
+                Toast.makeText(this@MainActivity, "???????????", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            JReflection.methodViewClick(
+                mButtonTest,
+                View::class.java,
+                "setOnClickListener",
+                listener
+            )
+        }
+        //hook startActivity
         mButtonHookStartActivity.setOnClickListener {
-            StartActivityHook().hookActivityStartContextImpl1(
+            IStartActivity().hookInstrumentation1(
                 this,
                 EmptyActivity::class.java.name,
                 ProxyActivity::class.java.name
@@ -63,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         mButtonHookStartContext.setOnClickListener {
-            StartActivityHook().hookActivityStartContextImpl2(
+            IStartActivity().hookInstrumentation2(
                 applicationContext,
                 EmptyActivity::class.java.name,
                 ProxyActivity::class.java.name
@@ -74,6 +84,13 @@ class MainActivity : AppCompatActivity() {
         }
         mButtonStartActivity.setOnClickListener {
             startActivity(Intent(this, EmptyActivity::class.java))
+        }
+        //hook binder
+        mButtonHookBinder.setOnClickListener {
+            IBinderInvoke().hookBinder("clipboard", "android.content.IClipboard")
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val data = ClipData.newPlainText("Label", "iBinder hook hook")
+            cm.setPrimaryClip(data)
         }
     }
 }
