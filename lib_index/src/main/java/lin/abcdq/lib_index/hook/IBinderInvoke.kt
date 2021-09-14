@@ -60,7 +60,7 @@ class IBinderInvoke {
                 "sCache"
             ) as Map<*, *>).toMutableMap()
             sCache[service_name] = iService
-            sCache[service_name] = iService
+            Log.e("IBinderInvoke", "iService= $iService")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -80,8 +80,9 @@ class IBinderInvoke {
         }
 
         override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any {
-            Log.e("BinderHandler", "hook binder hook binder hook binder")
-            return method?.invoke(mIService, args)!!
+            Log.e("IBinderInvoke", "BinderHandler invoke look look!!!")
+            return if (args == null) method?.invoke(mIService)!!
+            else method?.invoke(mIService, *args)!!
         }
     }
 
@@ -93,14 +94,15 @@ class IBinderInvoke {
         private var mServicePack = service_pack
 
         override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any {
-            Log.e("InterfaceHandler", "hook binder hook binder hook binder")
+            Log.e("IBinderInvoke", "InterfaceHandler invoke look look!!!")
             if (queryLocalMethod == method?.name) {
                 return JProxy.proxy(
                     proxy!!::class.java,
                     BinderHandler(mIBinder, mServicePack)
                 )!!
             }
-            return method?.invoke(mIBinder, args)!!
+            return if (args == null) method?.invoke(mIBinder)!!
+            else method?.invoke(mIBinder, *args)!!
         }
     }
 }
