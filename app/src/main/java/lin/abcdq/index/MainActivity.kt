@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import lin.abcdq.index.hooktest.EmptyActivity
+import lin.abcdq.index.hooktest.ProxyActivity
 import lin.abcdq.index.utils.CAO
 import lin.abcdq.index.utils.Permission
 import lin.abcdq.index.utils.PermissionHandler
@@ -16,7 +18,6 @@ import lin.abcdq.lib_index.hook.IBinderInvoke
 import lin.abcdq.lib_index.hook.IStartActivity
 import lin.abcdq.lib_index.hook.JReflection
 import lin.abcdq.lib_index.inject.InjectDex
-import lin.abcdq.lib_index.shadow.ShadowPlugin
 import lin.abcdq.lib_index.shadow.model.IBundle
 import java.io.File
 
@@ -99,11 +100,8 @@ class MainActivity : AppCompatActivity() {
         }
         //start plugin activity no hook
         mButtonStartActivityNoHook.setOnClickListener {
-            val iBundle = IBundle(
-                this,
-                Class.forName("lin.abcdq.lib_index.shadow.test.TestActivity")
-            )
-            ShadowPlugin.enter(iBundle)
+            val iBundle = IBundle(this, "lin.abcdq.index.shadowtest.TestActivity")
+            iBundle.enter()
         }
     }
 }

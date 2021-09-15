@@ -1,8 +1,9 @@
-package lin.abcdq.index
+package lin.abcdq.index.hooktest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import lin.abcdq.index.R
 
 class ProxyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
