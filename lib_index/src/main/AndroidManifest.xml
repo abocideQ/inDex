@@ -2,4 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lin.abcdq.lib_index">
 
+    <application>
+        <activity
+            android:name=".shadow.activity.ShadowHostActivity"
+            android:exported="true" />
+    </application>
+
 </manifest>

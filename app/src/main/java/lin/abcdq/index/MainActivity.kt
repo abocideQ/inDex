@@ -4,11 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import lin.abcdq.index.utils.CAO
 import lin.abcdq.index.utils.Permission
 import lin.abcdq.index.utils.PermissionHandler
@@ -16,6 +16,8 @@ import lin.abcdq.lib_index.hook.IBinderInvoke
 import lin.abcdq.lib_index.hook.IStartActivity
 import lin.abcdq.lib_index.hook.JReflection
 import lin.abcdq.lib_index.inject.InjectDex
+import lin.abcdq.lib_index.shadow.ShadowPlugin
+import lin.abcdq.lib_index.shadow.model.IBundle
 import java.io.File
 
 
@@ -36,6 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     //hook binder need API < Android P
     private val mButtonHookBinder: Button by lazy { findViewById(R.id.bt_binder) }
+
+    //no hook start Plugin Activity
+    private val mButtonStartActivityNoHook: Button by lazy { findViewById(R.id.bt_start_activity_no_hook) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +96,14 @@ class MainActivity : AppCompatActivity() {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val data = ClipData.newPlainText("Label", "iBinder hook hook")
             cm.setPrimaryClip(data)
+        }
+        //start plugin activity no hook
+        mButtonStartActivityNoHook.setOnClickListener {
+            val iBundle = IBundle(
+                this,
+                Class.forName("lin.abcdq.lib_index.shadow.test.TestActivity")
+            )
+            ShadowPlugin.enter(iBundle)
         }
     }
 }

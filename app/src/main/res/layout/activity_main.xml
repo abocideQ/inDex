@@ -108,10 +108,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="end"
-            android:text="HotFix/Plugin by ART  !!!!!!!!!!!!!!!"
+            android:text="HotFix/Plugin with no hook  模仿腾讯Shadow"
             android:textColor="@color/purple_700"
             android:textSize="16sp" />
 
+        <Button
+            android:id="@+id/bt_start_activity_no_hook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="plugin.startActivity"
+            android:textAllCaps="false"
+            tools:ignore="MissingConstraints" />
+
+        <!--  HotFix/Plugin by ART  !!!!!!!!!!!!!!! -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="end"
+            android:text="HotFix/Plugin by ART  !!!!!!!!!!!!!!!"
+            android:textColor="@color/purple_700"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </ScrollView>
