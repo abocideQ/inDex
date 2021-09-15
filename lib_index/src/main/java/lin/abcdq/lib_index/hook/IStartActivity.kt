@@ -11,6 +11,7 @@ import android.util.Log
 
 /**
  * hook startActivity
+ * API < Android P
  */
 class IStartActivity {
 

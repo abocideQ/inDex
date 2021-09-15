@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="\n hook startActivity by \n mInstrumentation in ActivityThread"
+            android:text="\n hook startActivity by \n mInstrumentation in ActivityThread \n API < Android P"
             android:textSize="16sp" />
 
         <Button
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="\n hook iBinder \n serviceManager"
+            android:text="\n hook iBinder \n serviceManager \n API < Android P"
             android:textSize="16sp" />
 
         <Button
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="\n merge dexElement \n need before class be used"
+            android:text="\n merge dexElement \n need before class be used \n API < Android P"
             android:textSize="16sp" />
 
         <Button

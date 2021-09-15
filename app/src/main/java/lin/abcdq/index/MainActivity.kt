@@ -21,7 +21,7 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    //inject dexElement
+    //inject dexElement need API < Android P
     private val mButtonInject: Button by lazy { findViewById(R.id.bt_inject) }
     private val mButtonTest: Button by lazy { findViewById(R.id.bt_test) }
     private val mButtonMethod: Button by lazy { findViewById(R.id.bt_method) }
@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity() {
     private val dexPath by lazy { "${obbDir.absolutePath}/dex" }
     private val dexOutPath by lazy { "${obbDir.absolutePath}/dexOut" }
 
-    //hook startActivity
+    //hook startActivity need API < Android P
     private val mButtonHookStartActivity: Button by lazy { findViewById(R.id.bt_hook_start_activity) }
     private val mButtonHookStartContext: Button by lazy { findViewById(R.id.bt_hook_start_context) }
     private val mButtonStartActivity: Button by lazy { findViewById(R.id.bt_start) }
 
-    //hook binder
+    //hook binder need API < Android P
     private val mButtonHookBinder: Button by lazy { findViewById(R.id.bt_binder) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
